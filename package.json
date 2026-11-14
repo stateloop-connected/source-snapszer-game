@@ -1,7 +1,7 @@
 {
   "name": "snapszer-game",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "description": "Snapszer (Schnapsen, the Hungarian race to 66) in React + Vite + TypeScript — two-player and three-player modes against computer opponents with the Hungarian (Tell) deck, marriages, closing, snapszer and kontra under the full Hungarian rules, autosave & resume, shared Zoltan’s Arcade stats. Part of Arcade-Game-Center.",
   "license": "MIT",
