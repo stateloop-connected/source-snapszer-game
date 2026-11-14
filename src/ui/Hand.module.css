@@ -97,3 +97,27 @@
 .cardBtn[aria-pressed='true'] .hatch {
   transform: translateY(calc(var(--cw) * -1.6 * 0.14));
 }
+
+/*
+ * Eight cards on a phone held upright (the table is a size container taller than wide there): two rows of four, the
+ * second row overlapping the bottom of the first, so each card shows a strip about one card-width tall. Wider tables
+ * (desktop, landscape) keep the single overlapping row.
+ */
+@container table (orientation: portrait) {
+  .rows {
+    --cw: var(--hand4-w, 64px);
+    display: grid;
+    grid-template-columns: repeat(4, var(--cw));
+    justify-content: center;
+    column-gap: 6px;
+    padding-top: calc(var(--cw) * 0.24);
+  }
+
+  .rows .slot {
+    margin-left: 0;
+  }
+
+  .rows .slot:nth-child(n + 5) {
+    margin-top: calc(var(--cw) * -0.62);
+  }
+}

@@ -94,7 +94,7 @@ export function Table({ deal, units, target, name, figure, lang, tr, fmt, dental
       </div>
       <div className={styles.me}>{seat(0, 'bottom')}</div>
       <div className={styles.hand}>
-        <Hand cards={deal.hands[0]} trump={deal.trump} lang={lang} label={tr('yourHand')} {...hand} />
+        <Hand cards={deal.hands[0]} trump={deal.trump} lang={lang} label={tr('yourHand')} rows={three && deal.hands[0].length > 5} {...hand} />
       </div>
     </div>
   );

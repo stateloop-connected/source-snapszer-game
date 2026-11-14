@@ -69,13 +69,14 @@ format through the vendored [`src/arcade/`](./src/arcade) kit.
 - 🃏 **The real table**: the turned-up trump lies crosswise under the talon, and the talon shows how many cards are left. A closed
   talon is turned across the trump and says who closed it. Each seat shows its won-trick pile with a count and its announced
   marriages as a small King + Over pair with the 20 or 40 next to it.
-- 🗣️ **Every announcement as a button** in the bar under the table: „Elég!” (enabled only once you really have 66), Exchange
+- 🗣️ **Every announcement as a button** in the bar under the table: „Elég!”, Exchange
   (Csere), Close (Betakarás), 20 / 40, Snapszer and Kontra (Rekontra and Subkontra in the three-player game), and Fold (Bedobás)
   for the three-player caller. A button is disabled (with a dashed outline) when the moment does not allow it.
 - 🚫 **Rules enforced**: cards you may not play are dimmed **and hatched**, a shape cue rather than colour. Tap or click one
   anyway and the game tells you which rule stops it.
-- 🙈 **Points counted in your head**, as at a real table. The „Pontok mutatása” / "Show points" setting (off by default) shows your
-  own counted points (with two players also a 20 / 40 still waiting for your first trick). The bots' points are never shown during
+- 🙈 **Points counted in your head**, as at a real table. While the points are hidden, „Elég!” is open on every turn of yours and
+  looks the same at 66; call it too early and the opponent gets 2 units. The „Pontok mutatása” / "Show points" setting (off by
+  default) shows your own counted points, and then „Elég!” is enabled only at 66 (with two players also a 20 / 40 still waiting for your first trick). The bots' points are never shown during
   a deal.
 - 🧑‍🎨 **Portraits** in the deck's woodcut style: you, **Gazsi** the coachman (spectacles, grey beard, cap) and **Rozi** the
   innkeeper (polka-dot headscarf, earrings). Each seat shows the name, the units, dealer, caller or defender, and a framed
@@ -129,7 +130,7 @@ The source is the Hungarian Wikipedia article „Snapszer”. Where it is silent
   trump, or close the talon.
 - **20 / 40**: King and Over of one suit, shown on your lead, are worth 20 (40 in trump). They count once you have won a trick, and
   one of the two must be led next.
-- **„Elég!”**: with 66 points you end the deal and win it. If nobody says it, the last trick wins.
+- **„Elég!”**: with 66 points you end the deal and win it; say it too early and the opponent gets 2 units. If nobody says it, the last trick wins.
 - **Snapszer**: announced during the first round, you must take every trick: 6 units, or 6 to the opponent if it fails.
 - **Kontra** doubles the deal, or the snapszer.
 

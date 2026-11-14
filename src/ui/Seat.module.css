@@ -193,6 +193,14 @@
     justify-content: flex-end;
   }
 
+  .info {
+    min-width: 5.5em;
+  }
+
+  .back {
+    margin-left: calc(var(--mini-w, 22px) * -0.7);
+  }
+
   .badge {
     font-size: 10px;
     padding: 0 5px;

@@ -133,9 +133,9 @@ describe('Snapszer rules dialog', () => {
     act(() => applyLang('de'));
     text = dialog().textContent ?? '';
     expect(text).toContain(
-      `Deine Punktzahl: (deine Einheiten − die Einheiten des besten Bots, mindestens ${n(0, 'de')}) × ${n(UNIT_POINTS, 'de')}, plus ${n(WIN_BONUS, 'de')}, wenn du die Partie gewinnst, mal der Stufe (Leicht ×${n(LEVEL_FACTOR.easy, 'de')}, Mittel ×${n(LEVEL_FACTOR.medium, 'de')}, Schwer ×${n(LEVEL_FACTOR.hard, 'de')}); höchstens ${n(MAX_SCORE, 'de')} Punkte.`,
+      `Deine Punktzahl: (deine Einheiten − die Einheiten des besten Bots, mindestens ${n(0, 'de')}) × ${n(UNIT_POINTS, 'de')}, plus ${n(WIN_BONUS, 'de')}, wenn du das Bummerl gewinnst, mal der Stufe (Leicht ×${n(LEVEL_FACTOR.easy, 'de')}, Mittel ×${n(LEVEL_FACTOR.medium, 'de')}, Schwer ×${n(LEVEL_FACTOR.hard, 'de')}); höchstens ${n(MAX_SCORE, 'de')} Punkte.`,
     );
-    expect(text).toContain(`Beispiel: Du gewinnst die Partie ${n(TARGET_UNITS, 'de')} zu ${n(3, 'de')} auf der Stufe Mittel: Das sind ${n(example, 'de')} Punkte.`);
+    expect(text).toContain(`Beispiel: Du gewinnst das Bummerl ${n(TARGET_UNITS, 'de')} zu ${n(3, 'de')} auf der Stufe Mittel: Das sind ${n(example, 'de')} Punkte.`);
   });
 
   it('has a described card-value diagram from cardPoints and a deal-points diagram; both follow dental mode', () => {

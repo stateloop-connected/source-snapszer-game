@@ -19,7 +19,7 @@ export const REASON_KEY: Readonly<Record<ResultReason | ResultReason3, MessageKe
 /** Corner index of a card: the numerals as printed, the court cards and the ace by their initial in that language. */
 export const RANK_SHORT: Readonly<Record<Lang, Readonly<Record<HRank, string>>>> = {
   en: { VII: 'VII', VIII: 'VIII', IX: 'IX', X: 'X', also: 'U', felso: 'O', kiraly: 'K', asz: 'A' },
-  hu: { VII: 'VII', VIII: 'VIII', IX: 'IX', X: 'X', also: 'A', felso: 'F', kiraly: 'K', asz: 'Á' },
+  hu: { VII: 'VII', VIII: 'VIII', IX: 'IX', X: 'X', also: 'Al', felso: 'F', kiraly: 'K', asz: 'Á' },
   de: { VII: 'VII', VIII: 'VIII', IX: 'IX', X: 'X', also: 'U', felso: 'O', kiraly: 'K', asz: 'A' },
 };
 

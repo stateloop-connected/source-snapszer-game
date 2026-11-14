@@ -6,6 +6,16 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+- „Elég!” is a real call: with the points hidden it is open on every turn and looks the same at 66 (a wrong call gives the
+  opponent 2 units); with „Pontok mutatása” on it is enabled only at 66.
+- 20 / 40 buttons share one bar cell (suit icon and value, the suit in the accessible name); the landscape bar has two columns.
+- Eight cards on an upright phone lay out in two overlapping rows of four; a three-player trick lies in one row on a phone.
+- Corner index: the Hungarian Alsó is „Al”, no longer the same letter as the Ász.
+- German uses the Schnapsen terms: „Ich bin draußen!”, „Bummerl”, „Schneider”, „schwarz”; Schnapser is glossed as the Hungarian
+  snapszer announcement.
+- The table scrolls into view again when a new deal starts on a phone.
+
 ## [1.0.0] - 2026-11-14
 
 ### Added

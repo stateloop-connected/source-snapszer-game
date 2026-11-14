@@ -4,8 +4,8 @@
 
 **Snapszer** (Schnapsen, „Sechsundsechzig“), das ungarische Rennen auf 66, gebaut mit **React 18**, **Vite** und **TypeScript**.
 Du spielst zu zweit gegen **Gazsi** oder zu dritt gegen **Gazsi** und **Rozi**, mit dem ungarischen (Tell-)Blatt. Das Spiel folgt
-den vollständigen ungarischen Regeln: der aufgedeckte Trumpf unter dem Talon, Tauschen und Zudrehen, 20 / 40, „Elég!“ (Genug!),
-Schnapser und Kontra. Zu dritt spielt der Ansager allein gegen die beiden anderen. Eine Partie („Rádli“) geht bis 7 Einheiten, und
+den vollständigen ungarischen Regeln: der aufgedeckte Trumpf unter dem Talon, Tauschen und Zudrehen, 20 / 40, „Ich bin draußen!“
+(ungarisch „Elég!“), Schnapser und Kontra. Zu dritt spielt der Ansager allein gegen die beiden anderen. Eine Partie, das „Bummerl“ (ungarisch „rádli“), geht bis 7 Einheiten, und
 ein gut lesbares Protokoll hält jede Karte und jede Ansage fest.
 Es läuft eigenständig **und** als eines der fünfzehn Spiele von **[Zoltan's Arcade](https://github.com/ZoliQua/Arcade-Game-Center)**.
 Spiel es unter [dulzoltan.hu/arcade/#/play/snapszer](https://dulzoltan.hu/arcade/#/play/snapszer).
@@ -69,13 +69,14 @@ Speicherformat über das eingebundene [`src/arcade/`](./src/arcade)-Kit.
 - 🃏 **Der echte Tisch**: Der aufgedeckte Trumpf liegt quer unter dem Talon, und der Talon zeigt, wie viele Karten übrig sind. Ein
   zugedrehter Talon liegt quer über dem Trumpf und sagt, wer zugedreht hat. Jeder Platz zeigt seinen Stichstapel mit Anzahl und
   seine Ansagen als kleines Paar aus König und Ober mit der 20 oder 40 daneben.
-- 🗣️ **Jede Ansage als Knopf** in der Leiste unter dem Tisch: „Genug!“ (nur aktiv, wenn du wirklich 66 hast), Tauschen, Zudrehen,
+- 🗣️ **Jede Ansage als Knopf** in der Leiste unter dem Tisch: „Ich bin draußen!“, Tauschen, Zudrehen,
   20 / 40, Schnapser und Kontra (zu dritt Rekontra und Subkontra) und Hinwerfen für den Ansager zu dritt. Ein Knopf ist
   deaktiviert (mit gestricheltem Rand), wenn der Moment ihn nicht erlaubt.
 - 🚫 **Die Regeln werden durchgesetzt**: Karten, die du nicht spielen darfst, sind abgedunkelt **und schraffiert**, also durch eine
   Form erkennbar statt durch Farbe. Tippst oder klickst du trotzdem darauf, sagt das Spiel dir, welche Regel es verbietet.
-- 🙈 **Punkte im Kopf zählen**, wie am echten Tisch. Die Einstellung „Punkte anzeigen“ (standardmäßig aus) zeigt deine eigenen
-  gezählten Punkte (zu zweit auch eine 20 / 40, die noch auf deinen ersten Stich wartet). Die Punkte der Bots werden während
+- 🙈 **Punkte im Kopf zählen**, wie am echten Tisch. Solange die Punkte verdeckt sind, ist „Ich bin draußen!“ in deinem Zug immer
+  aktiv und sieht bei 66 nicht anders aus; verzählst du dich, bekommt der Gegner 2 Einheiten. Die Einstellung „Punkte anzeigen“
+  (standardmäßig aus) zeigt deine eigenen gezählten Punkte, und der Knopf ist dann nur bei 66 aktiv (zu zweit auch eine 20 / 40, die noch auf deinen ersten Stich wartet). Die Punkte der Bots werden während
   einer Runde nie gezeigt.
 - 🧑‍🎨 **Porträts** im Holzschnittstil des Blatts: du, **Gazsi**, der Kutscher (Brille, grauer Bart, Schirmmütze), und **Rozi**,
   die Wirtin (gepunktetes Kopftuch, Ohrringe). Jeder Platz zeigt Namen, Einheiten, Geber, Ansager oder Gegenspieler und ein
@@ -133,8 +134,8 @@ Die Quelle ist der ungarische Wikipedia-Artikel „Snapszer“. Wo er schweigt, 
   gegen den aufgedeckten Trumpf tauschen oder den Talon zudrehen.
 - **20 / 40**: König und Ober einer Farbe, beim eigenen Ausspielen gezeigt, zählen 20 (in Trumpf 40). Sie zählen, sobald du einen
   Stich gemacht hast, und eine der beiden Karten musst du gleich ausspielen.
-- **„Genug!“**: Mit 66 Punkten beendest du die Runde und gewinnst sie. Sagt es niemand, gewinnt der letzte Stich.
-- **Schnapser**: In der ersten Runde angesagt, musst du alle Stiche machen: 6 Einheiten, oder 6 für den Gegner, wenn es misslingt.
+- **„Ich bin draußen!“**: Mit 66 Punkten beendest du die Runde und gewinnst sie; sagst du es zu früh, bekommt der Gegner 2 Einheiten. Sagt es niemand, gewinnt der letzte Stich.
+- **Schnapser** (die ungarische Snapszer-Ansage): In der ersten Runde angesagt, musst du alle Stiche machen: 6 Einheiten, oder 6 für den Gegner, wenn es misslingt.
 - **Kontra** verdoppelt die Runde oder den Schnapser.
 
 **Zu dritt**: 24 Karten, je 8 in zwei Runden zu 4. Der Ansager (der Platz nach dem Geber) sagt Trumpf aus seinen ersten 4 Karten an
@@ -146,8 +147,8 @@ wechselt jede Runde.
 | Der Verlierer … | Einheiten |
 | --- | --- |
 | hat mindestens 33 Punkte | 1 |
-| hat weniger als 33 Punkte („Maccs“) | 2 |
-| hat keinen Stich gemacht | 3 |
+| hat weniger als 33 Punkte („Schneider“) | 2 |
+| hat keinen Stich gemacht („schwarz“) | 3 |
 | Schnapser (geschafft oder misslungen) | 6 |
 
 Wer zudreht und dann keine 66 erreicht, gibt dem Gegner 1 Einheit (der Wert aus dem Wiki). Eine Partie läuft, bis ein Platz
@@ -158,7 +159,7 @@ Wer zudreht und dann keine 66 erreicht, gibt dem Gegner 1 Einheit (der Wert aus 
 | Taste | Aktion |
 | --- | --- |
 | 🖱️ Klick auf eine Karte | Ausspielen oder sehen, warum es nicht erlaubt ist (zu dritt als Ansager: damit Trumpf ansagen) |
-| 🖱️ Knöpfe der Leiste | Genug!, tauschen, zudrehen, 20 / 40, Schnapser, Kontra, hinwerfen |
+| 🖱️ Knöpfe der Leiste | Ich bin draußen!, tauschen, zudrehen, 20 / 40, Schnapser, Kontra, hinwerfen |
 | **Tab** / **Umschalt+Tab** | Zwischen Karten und Knöpfen wechseln (**Enter** / **Leertaste** drückt sie) |
 | **Enter** | Start · nächste Runde · weiter (wenn kein Knopf den Fokus hat) |
 | **P** / **Esc** | Pause / weiter |
@@ -191,7 +192,7 @@ die des besten Bots), **Punkte**, **Bestwert** und die aktive **Zeit**.
 
 ## 🤖 Die Bots
 
-- **Leicht** spielt zufällige erlaubte Karten. Es sagt trotzdem bei 66 „Genug!“, tauscht, wenn es hilft, und sagt seine 20 / 40 an.
+- **Leicht** spielt zufällige erlaubte Karten. Es sagt trotzdem bei 66 „Ich bin draußen!“, tauscht, wenn es hilft, und sagt seine 20 / 40 an.
 - **Mittel** spielt nach Faustregeln: Bei offenem Talon spielt es niedrig aus, im strengen Spiel holt es seine höchsten Karten,
   sichert Punkte und nimmt den Stich, der 66 bringt.
 - **Schwer** verteilt die unbekannten Karten so, wie es zu allem passt, was es gesehen hat, spielt jede mögliche Aktion mit

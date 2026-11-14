@@ -41,7 +41,23 @@
   gap: 4px;
   min-width: 0;
   padding-inline: 6px;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.split {
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+}
+
+.split > :global(.arc-btn) {
+  flex: 1 1 0;
+  min-width: 0;
+  justify-content: center;
+  gap: 3px;
+  padding-inline: 4px;
 }
 
 .buttons > :global(.arc-btn:disabled) {
@@ -69,7 +85,16 @@
 }
 
 .bar .buttons > :global(.arc-btn),
+.bar .split > :global(.arc-btn),
 .bar .head > :global(.arc-btn) {
   min-height: 46px;
   font-size: 14px;
+}
+
+/* Phone sideways: the bar is a narrow column beside the table — two buttons per row, so a shared 20 / 40 cell
+   still gives each half a full thumb width. */
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 560px) {
+  .bar .buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }

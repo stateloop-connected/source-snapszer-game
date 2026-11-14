@@ -32,6 +32,8 @@ import {
 import { LEVELS, type Level } from './bots';
 import {
   canClose,
+  canDeclare,
+  canDeclare3,
   canDeclareWin,
   canDeclareWin3,
   canExchange,
@@ -268,10 +270,12 @@ export function SnapszerGame(props: ArcadeGameProps = {}) {
   }, [touch, immersiveOn, inMatch, phoneLandscape]);
 
   // When play starts or resumes on a phone, bring the table and the bar into view, the bar at the bottom edge.
+  // Again whenever a new deal starts (the deal-over card may have been scrolled).
+  const dealNo = match?.dealNo ?? 0;
   useEffect(() => {
     if (!touch || !running) return;
     mainRef.current?.scrollIntoView?.({ block: 'end', behavior: 'smooth' });
-  }, [touch, running]);
+  }, [touch, running, dealNo]);
 
   // ── Match control ───────────────────────────────────────────
   const start = useCallback(() => {
@@ -466,10 +470,14 @@ export function SnapszerGame(props: ArcadeGameProps = {}) {
   if (deal) {
     const on = (b: boolean) => !(mine && b);
     const play = deal.mode === 'two' || deal.phase === 'play';
-    const declareOk = deal.mode === 'two' ? canDeclareWin(deal, 0) : canDeclareWin3(deal, 0);
+    // „Elég!”: with the points hidden you count in your head, as at the table — the call is always open on your turn
+    // (a wrong one costs WRONG_DECLARE_UNITS) and looks the same at 66. With the points shown, only a winning call.
+    const declareWins = deal.mode === 'two' ? canDeclareWin(deal, 0) : canDeclareWin3(deal, 0);
+    const declareLegal = deal.mode === 'two' ? canDeclare(deal, 0) : canDeclare3(deal, 0);
     buttons.push({
       id: 'declare', label: tr('declareBtn'), title: tr('declareInfo', { declare: fmt(DECLARE_THRESHOLD) }),
-      disabled: on(play && declareOk), primary: mine && declareOk, onClick: () => doAct({ type: 'declare' }),
+      disabled: on(play && (showPoints ? declareWins : declareLegal)), primary: showPoints && mine && declareWins,
+      onClick: () => doAct({ type: 'declare' }),
     });
     if (deal.mode === 'two') {
       buttons.push({ id: 'exchange', label: tr('exchangeBtn'), title: tr('exchangeInfo'), disabled: on(canExchange(deal, 0)), onClick: () => doAct({ type: 'exchange' }) });
@@ -480,19 +488,21 @@ export function SnapszerGame(props: ArcadeGameProps = {}) {
     if (suits.length === 0 || !mine) {
       buttons.push({ id: 'marriage', label: tr('marriageNone'), title: marriageTitle, disabled: true, onClick: () => undefined });
     } else {
-      for (const suit of suits) {
+      // One cell whatever the count: the suit icon and the value on the button, the suit in its accessible name.
+      const split = suits.map((suit): BarButton => {
         const pts = fmt(suit === deal.trump ? MARRIAGE_POINTS.trump : MARRIAGE_POINTS.plain);
-        const text = tr('marriageBtn', { points: pts, suit: suitName(suit, tr) });
-        buttons.push({
-          id: `marriage-${suit}`, name: text, title: marriageTitle, disabled: false, onClick: () => doAct({ type: 'marriage', suit }),
+        return {
+          id: `marriage-${suit}`, name: tr('marriageBtn', { points: pts, suit: suitName(suit, tr) }), title: marriageTitle, disabled: false,
+          onClick: () => doAct({ type: 'marriage', suit }),
           label: (
             <>
-              <SuitIcon suit={suit} size={15} />
-              {text}
+              <SuitIcon suit={suit} size={16} />
+              {pts}
             </>
           ),
-        });
-      }
+        };
+      });
+      buttons.push({ id: 'marriage', label: '', disabled: false, onClick: () => undefined, split });
     }
     buttons.push({
       id: 'snapszer', label: tr('snapszerBtn'), title: tr('snapszerInfo'),

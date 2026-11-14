@@ -17,16 +17,18 @@ export type HandProps = {
   playable?: ReadonlySet<string> | null;
   /** Null makes the hand read-only. */
   onCard?: ((card: HCard) => void) | null;
+  /** Eight cards: on an upright phone they lay out in two overlapping rows of four, so every card shows a wide strip. */
+  rows?: boolean;
 };
 
 /**
  * Your cards as buttons (more than five overlap, and then every card carries a corner index with rank and suit), sized from the hand's own width and the table's height (never the viewport), so five or
  * eight cards fit on a 360 px phone, in landscape and in full screen. Overlapping cards keep a corner index.
  */
-export function Hand({ cards, trump, lang, label, selected = null, playable = null, onCard = null }: HandProps) {
+export function Hand({ cards, trump, lang, label, selected = null, playable = null, onCard = null, rows = false }: HandProps) {
   const sorted = sortHand(cards, trump);
   return (
-    <ul className={styles.hand} aria-label={label} data-testid="snapszer-hand" style={{ '--n': Math.max(1, sorted.length) } as CSSProperties}>
+    <ul className={`${styles.hand}${rows ? ` ${styles.rows}` : ''}`} aria-label={label} data-testid="snapszer-hand" data-rows={rows ? 'true' : 'false'} style={{ '--n': Math.max(1, sorted.length) } as CSSProperties}>
       {sorted.map((card) => {
         const key = cardKey(card);
         const isSel = selected === key;

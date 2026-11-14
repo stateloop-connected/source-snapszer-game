@@ -9,6 +9,7 @@
   border-radius: var(--radius-md, 10px);
   min-height: 0;
   min-width: 0;
+  overflow: hidden;
 }
 
 .stock {
@@ -188,4 +189,16 @@
 
 .three .south {
   margin-top: calc(var(--mid-w, 60px) * -0.7);
+}
+
+/* On a phone the three cards of a trick lie in one row (west · you · east), so the trick needs only one card height. */
+@media (pointer: coarse) {
+  .three .trickCards {
+    grid-template-columns: auto auto auto;
+    grid-template-areas: 'west south east';
+  }
+
+  .three .south {
+    margin-top: 0;
+  }
 }

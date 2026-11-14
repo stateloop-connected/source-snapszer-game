@@ -10,6 +10,8 @@ export type BarButton = {
   disabled: boolean;
   primary?: boolean;
   onClick(): void;
+  /** Several buttons sharing this one cell (the 20 / 40 suits), so the grid never grows a row. */
+  split?: readonly BarButton[];
 };
 
 export type ActionBarProps = {
@@ -52,7 +54,16 @@ export function ActionBar(p: ActionBarProps) {
       </div>
       {p.buttons.length > 0 && (
         <div className={styles.buttons} role="group" aria-label={p.label}>
-          {p.buttons.map((b) => (
+          {p.buttons.map((b) =>
+            b.split ? (
+              <div key={b.id} className={styles.split} data-cell={b.id}>
+                {b.split.map((x) => (
+                  <button key={x.id} type="button" className="arc-btn" disabled={x.disabled} title={x.title} aria-label={x.name} data-action={x.id} onClick={x.onClick}>
+                    {x.label}
+                  </button>
+                ))}
+              </div>
+            ) : (
             <button
               key={b.id}
               type="button"
@@ -65,7 +76,8 @@ export function ActionBar(p: ActionBarProps) {
             >
               {b.label}
             </button>
-          ))}
+            ),
+          )}
         </div>
       )}
     </section>

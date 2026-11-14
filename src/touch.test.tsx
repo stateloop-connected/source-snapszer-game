@@ -11,11 +11,13 @@ import {
   cardKey,
   legalPlays,
   marriageOptions,
+  WRONG_DECLARE_UNITS,
   type Deal2State,
   type Deal3State,
 } from './engine';
 import type { Match } from './game/match';
 import { MESSAGES } from './i18n';
+import { SUIT_KEY } from './ui/labels';
 import { SnapszerGame } from './SnapszerGame';
 import { findMatch, humanTurn, save, savedMatch } from './test/fixtures';
 import { setCoarsePointer } from './test/touchEnv';
@@ -112,20 +114,59 @@ describe('Snapszer touch controls', () => {
     expect(handButtons()).toHaveLength(m.deal.hands[0].length - 1);
   });
 
-  it('„Enough!” is a bar button, enabled only at 66', () => {
+  it('points hidden (default): „Enough!” is enabled on your turn even under 66 and looks the same as at 66', () => {
+    const low = findMatch((x) => humanTurn(x) && !canDeclareWin(two(x), 0));
+    resume(low);
+    expect(action('declare').disabled).toBe(false);
+    expect(action('declare').className).not.toMatch(/primary/);
+  });
+
+  it('points hidden: a wrong „Enough!” under 66 gives the opponent WRONG_DECLARE_UNITS', () => {
+    const m = findMatch((x) => humanTurn(x) && !canDeclareWin(two(x), 0) && two(x).kontra.game === null && !two(x).snapszer);
+    resume(m);
+    tap(action('declare'));
+    const after = savedMatch()!;
+    expect(after.deal.result).toEqual({ winner: 1, units: WRONG_DECLARE_UNITS, reason: 'declared' });
+    expect(after.units[1]).toBe(m.units[1] + WRONG_DECLARE_UNITS);
+  });
+
+  it('points shown: „Enough!” is enabled only at 66', () => {
+    localStorage.setItem('snapszer.showPoints', '1');
     const low = findMatch((x) => humanTurn(x) && !canDeclareWin(two(x), 0));
     resume(low);
     expect(action('declare').disabled).toBe(true);
   });
 
-  it('„Enough!” at 66 ends the deal for you', () => {
+  it('„Enough!” at 66 ends the deal for you (points shown, the button is highlighted)', () => {
+    localStorage.setItem('snapszer.showPoints', '1');
     const m = findMatch((x) => humanTurn(x) && canDeclareWin(two(x), 0));
     resume(m);
     expect(action('declare').disabled).toBe(false);
+    expect(action('declare').className).toMatch(/primary/);
     tap(action('declare'));
     const after = savedMatch()!;
     expect(after.deal.result?.winner).toBe(0);
     expect(after.deal.result?.reason).toBe('declared');
+  });
+
+  it('two 20 / 40 buttons share one cell: icon and value only, the suit in the accessible name', () => {
+    const m = findMatch((x) => humanTurn(x) && marriageOptions(two(x), 0).length === 2, { maxSeed: 3000 });
+    resume(m);
+    const cells = bar().querySelector('[role="group"]')!.children;
+    expect(cells).toHaveLength(6);
+    for (const suit of marriageOptions(two(m), 0)) {
+      const b = action(`marriage-${suit}`);
+      const pts = suit === two(m).trump ? '40' : '20';
+      expect(b.textContent).toBe(pts);
+      expect(b.querySelector('svg')).toBeTruthy();
+      expect(b.getAttribute('aria-label')).toBe(en.marriageBtn.replace('{points}', pts).replace('{suit}', MESSAGES.en[SUIT_KEY[suit]]));
+    }
+  });
+
+  it('three players with eight cards: the hand can lay out in two rows of four', () => {
+    const m = findMatch((x) => humanTurn(x) && x.deal.mode === 'three' && x.deal.hands[0].length === 8 && (x.deal as Deal3State).phase === 'play', { mode: 'three' });
+    resume(m);
+    expect(screen.getByTestId('snapszer-hand').getAttribute('data-rows')).toBe('true');
   });
 
   it('Exchange swaps the trump Under from the bar', () => {
@@ -202,6 +243,15 @@ describe('Snapszer touch controls', () => {
     expect(root.style.getPropertyValue('--snap-fit-h')).toBe(`${window.innerHeight - 56}px`);
     expect(scroll).toHaveBeenCalledWith({ block: 'end', behavior: 'smooth' });
     expect(screen.getByTestId('snapszer-table').className).toMatch(/fit/);
+  });
+
+  it('the table scrolls into view again when the next deal starts', () => {
+    const scroll = vi.fn();
+    Element.prototype.scrollIntoView = scroll;
+    resume(findMatch((x) => x.phase === 'dealOver'));
+    const before = scroll.mock.calls.length;
+    key('Enter');
+    expect(scroll.mock.calls.length).toBeGreaterThan(before);
   });
 
   it('the full-screen button toggles the immersive mode', () => {

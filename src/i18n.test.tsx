@@ -34,6 +34,16 @@ describe('Snapszer i18n', () => {
     expect(MESSAGES.hu.showPoints).toBe('Pontok mutatása');
   });
 
+  it('uses the Austrian / German Schnapsen terms in German', () => {
+    expect(MESSAGES.de.declareBtn).toBe('Ich bin draußen!');
+    expect(MESSAGES.de.setupBody).toContain('„Bummerl”');
+    expect(MESSAGES.de.rulesScoringDeal).toContain('„Schneider”');
+    expect(MESSAGES.de.rulesScoringDeal).toContain('„schwarz”');
+    expect(MESSAGES.de.rulesRuleSnapszer).toContain('ungarische');
+    expect(MESSAGES.de.reasonTrump).toContain('keine Karte in {led}');
+    for (const k of Object.keys(MESSAGES.de) as MessageKey[]) expect(MESSAGES.de[k], k).not.toMatch(/Genug|Rádli|Maccs/);
+  });
+
   it('keeps the same placeholders in every language', () => {
     const vars = (s: string) => (s.match(/\{\w+\}/g) ?? []).sort().join();
     for (const k of Object.keys(MESSAGES.en) as MessageKey[]) {

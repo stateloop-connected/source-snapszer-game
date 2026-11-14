@@ -68,13 +68,14 @@ használja a beemelt [`src/arcade/`](./src/arcade) készleten keresztül.
 - 🃏 **Az igazi asztal**: a felfordított adu keresztben fekszik a talon alatt, a talon mutatja, hány lap maradt. A betakart talon
   keresztben fekszik az adun, és kiírja, ki takart be. Minden helyen ott az elvitt ütések kupaca a számukkal, és a bemondott
   20 / 40 kis király–felső párként, mellette a 20 vagy a 40.
-- 🗣️ **Minden bemondás gomb** az asztal alatti sávban: „Elég!” (csak akkor aktív, ha tényleg megvan a 66), Csere, Betakarás,
+- 🗣️ **Minden bemondás gomb** az asztal alatti sávban: „Elég!”, Csere, Betakarás,
   20 / 40, Snapszer és Kontra (hármasban Rekontra és Szubkontra), valamint a hármas hívónak Bedobom. Ha a pillanat nem engedi, a gomb
   tiltott (szaggatott kerettel).
 - 🚫 **A szabályokat betartatja**: a most nem játszható lapok halványak **és vonalkázottak**, tehát formából látszik, nem színből.
   Ha mégis rájuk koppintasz vagy kattintasz, a játék megmondja, melyik szabály tiltja.
-- 🙈 **Fejben számolsz**, mint az igazi asztalnál. A „Pontok mutatása” beállítás (alapból kikapcsolva) a saját beszámított pontjaidat
-  mutatja (kettesben azt a 20 / 40-et is, amely még az első ütésedre vár). A gépek pontjai osztás közben sosem látszanak.
+- 🙈 **Fejben számolsz**, mint az igazi asztalnál. Amíg a pontok rejtve vannak, az „Elég!” a te köreidben mindig aktív, és 66-nál sem
+  néz ki másképp; ha elszámolod magad, az ellenfél 2 egységet kap. A „Pontok mutatása” beállítás (alapból kikapcsolva) a saját
+  beszámított pontjaidat mutatja, és ilyenkor az „Elég!” csak 66-nál aktív (kettesben azt a 20 / 40-et is, amely még az első ütésedre vár). A gépek pontjai osztás közben sosem látszanak.
 - 🧑‍🎨 **Portrék** a kártya fametszetes stílusában: te, **Gazsi**, a kocsis (szemüveg, ősz szakáll, sapka) és **Rozi**, a kocsmárosné
   (pöttyös kendő, fülbevaló). Minden helyen ott a név, az egységek, az osztó, a hívó vagy ellenjátékos, és egy keretes **▶ Soron**
   jelvény.
@@ -129,7 +130,7 @@ A forrás a magyar Wikipédia „Snapszer” szócikke. Ahol hallgat, ott a dön
   adura, vagy betakarhatod a talont.
 - **20 / 40**: egy szín királya és felsője, a saját hívásodnál felmutatva, 20 pontot ér (aduban 40). Akkor számít, ha már vittél
   ütést, és a kettő közül az egyiket rögtön ki kell hívni.
-- **„Elég!”**: 66 ponttal véget vetsz az osztásnak, és megnyered. Ha senki sem mondja, az utolsó ütés nyer.
+- **„Elég!”**: 66 ponttal véget vetsz az osztásnak, és megnyered; ha túl korán mondod, az ellenfél 2 egységet kap. Ha senki sem mondja, az utolsó ütés nyer.
 - **Snapszer**: az első körben bemondva minden ütést neked kell vinned: 6 egység, vagy 6 az ellenfélnek, ha nem sikerül.
 - A **kontra** megduplázza az osztást vagy a snapszert.
 
