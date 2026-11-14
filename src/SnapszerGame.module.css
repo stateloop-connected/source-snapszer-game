@@ -1,0 +1,180 @@
+.game {
+  max-width: 1180px;
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: -4px;
+}
+
+/* Phones: one compact row of Rules · Finish · Full screen (each still ≥ 44 px tall). */
+@media (max-width: 520px) {
+  .tools {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .tools > :global(.arc-btn) {
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: center;
+    gap: 5px;
+    padding-inline: 6px;
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+}
+
+.tools > :global(.arc-btn:disabled) {
+  opacity: 0.5;
+  border-style: dashed;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 14px;
+  align-items: start;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.board {
+  position: relative;
+  min-height: 460px;
+}
+
+.empty {
+  min-height: 460px;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.note {
+  margin: 6px 0;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.desc {
+  display: block;
+  opacity: 0.75;
+  font-size: 11px;
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.setup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.result {
+  text-align: left;
+  font-size: 14px;
+  margin: 4px 0 8px;
+}
+
+.result p {
+  margin: 4px 0;
+}
+
+.history {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.history th,
+.history td {
+  text-align: left;
+  padding: 2px 4px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.history td:last-child,
+.history th:last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ── Touch screens ─────────────────────────────────────────── */
+/*
+ * The table and the action bar together take exactly the height a sticky page header leaves (--snap-fit-h is
+ * measured by SnapszerGame; the portal's header and the standalone top bar both count), so the hand, the table,
+ * the talon and the bar are on one screen without scrolling during a deal.
+ */
+.game[data-touch='true'][data-match='true'] .main {
+  height: calc(var(--snap-fit-h, 100dvh) - 10px);
+  min-height: 300px;
+}
+
+.game[data-touch='true'][data-match='true'] .board {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Full screen on a touch screen: the title and the stat tiles give way; the tools row (with the exit) stays. */
+.game[data-touch='true']:global(.arc-immersive) :global(.arc-game__head),
+.game[data-touch='true']:global(.arc-fullscreen) :global(.arc-game__head),
+.game[data-touch='true']:global(.arc-immersive) :global(.arc-stats),
+.game[data-touch='true']:global(.arc-fullscreen) :global(.arc-stats) {
+  display: none;
+}
+
+.game[data-touch='true']:global(.arc-immersive),
+.game[data-touch='true']:global(.arc-fullscreen) {
+  gap: 6px;
+}
+
+.game[data-touch='true'][data-match='true']:global(.arc-immersive) .main,
+.game[data-touch='true'][data-match='true']:global(.arc-fullscreen) .main {
+  height: calc(var(--snap-fit-h, 100dvh) - var(--snap-tools-h, 44px) - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+}
+
+/* Phones sideways: the table left, the action bar right, both the full free height. */
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 560px) {
+  .main[data-phone-landscape='true'] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(190px, 34%);
+    grid-template-rows: minmax(0, 1fr);
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .main[data-phone-landscape='true'] > section {
+    overflow-y: auto;
+  }
+}

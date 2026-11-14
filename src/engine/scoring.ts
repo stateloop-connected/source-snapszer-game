@@ -16,6 +16,8 @@ export const SNAPSZER_UNITS = 6;
 /** Ruling: a declare under 66 gives the opponent the deal with 2 units (the wiki is silent). */
 export const WRONG_DECLARE_UNITS = 2;
 export const KONTRA_FACTOR = 2;
+/** 20 for the K + F of a plain suit, 40 in trump. */
+export const MARRIAGE_POINTS = { plain: 20, trump: 40 } as const;
 
 export const hasTrick = (state: Deal2State, seat: Seat): boolean => state.tricks.some((t) => t.winner === seat);
 

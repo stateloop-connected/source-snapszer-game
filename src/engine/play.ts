@@ -1,7 +1,7 @@
 import type { HCard, HSuit } from '../arcade/hungarian/cards';
 import { rankStrength, sameCard } from './deck';
 import { other } from './deal';
-import { DECLARE_THRESHOLD, points, resolveAfterTrick, resolveDeclare } from './scoring';
+import { DECLARE_THRESHOLD, MARRIAGE_POINTS, points, resolveAfterTrick, resolveDeclare } from './scoring';
 import type { Action, Deal2State, LogEntry, PlayedCard, Seat, Seat2, Trick } from './types';
 
 /** Minimum face-down cards above the trump for exchanging or closing. */
@@ -169,7 +169,7 @@ export function applyAction(state: Deal2State, action: Action): Deal2State {
       return { ...state, closed: { by: seat, atTrick: state.tricks.length }, log: withLog(state, { type: 'close', seat }) };
     case 'marriage': {
       if (!marriageOptions(state, seat).includes(action.suit)) throw new Error('Cannot announce this marriage');
-      const pts = action.suit === state.trump ? 40 : 20;
+      const pts = action.suit === state.trump ? MARRIAGE_POINTS.trump : MARRIAGE_POINTS.plain;
       return {
         ...state,
         marriages: [...state.marriages, { seat, suit: action.suit, points: pts }],

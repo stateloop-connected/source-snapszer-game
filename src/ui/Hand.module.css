@@ -1,0 +1,99 @@
+/*
+ * The hand is sized from the table container (see Table.module.css: --hand-w, the card width). Cards overlap only
+ * when they do not fit side by side; the step is never narrower than the corner index, so every rank and suit stays
+ * in view.
+ */
+.hand {
+  --cw: var(--hand-w, 72px);
+  --step: min(calc(var(--cw) + 6px), calc((100% - var(--cw)) / max(1, var(--n) - 1)));
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  list-style: none;
+  margin: 0;
+  padding: calc(var(--cw) * 0.26) 4px 2px;
+  min-width: 0;
+  touch-action: manipulation;
+}
+
+.slot {
+  flex: none;
+  width: var(--cw);
+  margin-left: calc(var(--step) - var(--cw));
+}
+
+.slot:first-child {
+  margin-left: 0;
+}
+
+.cardBtn {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform calc(160ms * var(--anim, 1)) ease-out;
+}
+
+.cardBtn:disabled {
+  cursor: default;
+}
+
+@media (hover: hover) {
+  .cardBtn:not(:disabled):hover {
+    transform: translateY(-8px);
+  }
+}
+
+.cardBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.card {
+  width: 100%;
+}
+
+/* Not playable now: dimmed plus a hatched veil (a shape cue, never colour alone). */
+.dim .card {
+  opacity: 0.6;
+  filter: grayscale(0.5);
+}
+
+.hatch {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  background: repeating-linear-gradient(135deg, transparent 0 5px, rgba(0, 0, 0, 0.32) 5px 8px);
+  border: 1.5px dashed rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.corner {
+  position: absolute;
+  top: 3px;
+  left: 1px;
+  width: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 2px 0 3px;
+  border-radius: 4px;
+  background: rgba(250, 243, 223, 0.94);
+  box-shadow: 0 0 0 1px rgba(46, 29, 18, 0.35);
+  color: #2e1d12;
+  font: 700 9.5px/1 Georgia, 'Times New Roman', serif;
+  letter-spacing: -0.03em;
+  pointer-events: none;
+  transition: transform calc(220ms * var(--anim, 1)) ease-out;
+}
+
+/* The kit raises a selected card by 14 % of its height; the index rides along. */
+.cardBtn[aria-pressed='true'] .corner,
+.cardBtn[aria-pressed='true'] .hatch {
+  transform: translateY(calc(var(--cw) * -1.6 * 0.14));
+}

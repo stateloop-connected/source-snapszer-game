@@ -55,17 +55,17 @@ export type {
   SnapszerCall, SnapszerMode, Trick, Trick3,
 } from './types';
 export { SNAPSZER_RANKS, cardKey, cardPoints, createDeck, mulberry32, rankStrength, sameCard, shuffle } from './deck';
-export { assertDrawableTalon, deal2, other, seat2 } from './deal';
+export { DEAL_FIRST, DEAL_SECOND, assertDrawableTalon, deal2, other, seat2 } from './deal';
 export {
   MIN_TALON_FOR_EXCHANGE, applyAction, canClose, canDeclare, canDeclareWin, canExchange, canKontra, canSnapszer, isTalonOpen,
   legalActions, legalPlays, marriageOptions, playedCount, trickWinner,
 } from './play';
 export {
-  CLOSE_FAILED_UNITS, DECLARE_THRESHOLD, KONTRA_FACTOR, MACCS_THRESHOLD, MACCS_UNITS, NO_TRICK_UNITS, SNAPSZER_UNITS,
+  CLOSE_FAILED_UNITS, DECLARE_THRESHOLD, KONTRA_FACTOR, MACCS_THRESHOLD, MARRIAGE_POINTS, MACCS_UNITS, NO_TRICK_UNITS, SNAPSZER_UNITS,
   WIN_UNITS, WRONG_DECLARE_UNITS, dealResult, dealUnits, hasTrick, isDealOver, marriagePoints, points, trickPoints,
 } from './scoring';
 export {
-  FOLD_ACE_UNITS, FOLD_UNITS, applyAction3, callerOf, canDeclare3, canDeclareWin3, canFold3, canKontra3, canSnapszer3,
+  DEAL3_ROUND, FOLD_ACE_UNITS, FOLD_UNITS, applyAction3, callerOf, canDeclare3, canDeclareWin3, canFold3, canKontra3, canSnapszer3,
   chooseTrump, deal3, dealResult3, fold, isDealOver3, legalActions3, legalPlays3, marriageOptions3, nextDealer3,
   points3, sideHasTrick3, sideOf, sidePoints3, trickWinner3,
 } from './three';

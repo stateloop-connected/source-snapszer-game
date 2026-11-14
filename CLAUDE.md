@@ -46,8 +46,12 @@ src/
   arcade/              # VENDORED shared kit from Arcade-Game-Center/packages/kit — never edit here
   engine/              # pure rules, no React: deck, deal, play, scoring, types
   bots/                # chooseAction(state, seat, level, rng): easy / medium / hard (hard samples the unseen cards)
-  game/                # match.ts (rádli to 7 units), score.ts (matchScore, MAX_SCORE 5000), save.ts (schema 1 + guard)
+  game/                # match.ts (rádli to 7 units), score.ts (matchScore, MAX_SCORE 5000), save.ts (schema 1 + guard),
+                       # finish.ts (Finish only between deals), prefs.ts, speed.ts, rulesNumbers.ts
+  ui/                  # Table, Seat, Centre (talon/trump/trick), Hand, ActionBar, LogPanel, labels, legality, figures/
   demo/SnapszerDemo.tsx  # bots only, writes nothing to storage
+  rules.tsx            # Rules dialog sections, CardValueDiagram, DealPointsDiagram
+  i18n.ts              # en / hu / de strings
   SnapszerGame.tsx     # embeddable game, ArcadeGameProps
   App.tsx              # exactly <ArcadeShell gameId="snapszer"><SnapszerGame /></ArcadeShell>
   main.tsx             # imports arcade/arcade.css once, applyTheme(readTheme())

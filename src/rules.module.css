@@ -1,0 +1,8 @@
+/* Sized from the dialog's own width (never the viewport), so it fits portrait, landscape and full screen alike. */
+.diagram {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  margin: 4px auto 8px;
+}

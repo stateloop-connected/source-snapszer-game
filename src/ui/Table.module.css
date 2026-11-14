@@ -1,0 +1,111 @@
+/*
+ * The table is its own container: every card size comes from its width (and, on touch screens where the game
+ * gives it a fixed height, from its height too), never from the viewport. So it fits a 360 px phone upright,
+ * sideways, in full screen and inside the portal alike.
+ */
+.table {
+  container-type: inline-size;
+  container-name: table;
+  --slots: 5;
+  --hand-w: clamp(44px, calc((100cqw - 24px) / var(--slots)), 96px);
+  --mid-w: clamp(40px, 13cqw, 78px);
+  --mini-w: clamp(16px, 4.2cqw, 24px);
+  --fig-w: clamp(38px, 10cqw, 58px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: var(--radius-lg, 14px);
+  background: radial-gradient(ellipse at 50% 45%, rgba(46, 104, 62, 0.22), transparent 72%), var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  min-width: 0;
+}
+
+.three {
+  /* eight cards overlap a little on a phone; each keeps its corner index */
+  --slots: 5.4;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+}
+
+.three .top {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.me,
+.hand {
+  min-width: 0;
+}
+
+/*
+ * Touch screens: the game gives the table a fixed height (the screen minus the action bar), so the table becomes a
+ * size container and the cards also shrink with the height. The centre takes what is left.
+ */
+.fit {
+  container-type: size;
+  flex: 1 1 0;
+  height: 100%;
+  min-height: 0;
+  --hand-w: clamp(36px, min(calc((100cqw - 20px) / var(--slots)), 19cqh), 96px);
+  --mid-w: clamp(30px, min(14cqw, 13cqh), 78px);
+  --mini-w: clamp(14px, min(4.4cqw, 3.6cqh), 24px);
+  --fig-w: clamp(30px, min(10cqw, 8.5cqh), 56px);
+  gap: 4px;
+  padding: 6px;
+}
+
+.mid {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.fit .top,
+.fit .me,
+.fit .hand {
+  flex: none;
+}
+
+.fit.three {
+  --mid-w: clamp(30px, min(17cqw, 12cqh), 78px);
+}
+
+/* Phone sideways: seats on the left, the centre on the right, your cards across the bottom. */
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 560px) {
+  .fit {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: 'top mid' 'me mid' 'hand hand';
+    --hand-w: clamp(34px, min(calc((100cqw - 20px) / var(--slots)), 18cqh), 90px);
+    --mid-w: clamp(28px, min(11cqw, 17cqh), 70px);
+    --fig-w: clamp(26px, 9cqh, 40px);
+  }
+
+  .fit .top {
+    grid-area: top;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .fit .mid {
+    grid-area: mid;
+  }
+
+  .fit .me {
+    grid-area: me;
+    align-self: start;
+  }
+
+  .fit .hand {
+    grid-area: hand;
+  }
+}
+
+.fit .mid {
+  flex: 1 1 0;
+}

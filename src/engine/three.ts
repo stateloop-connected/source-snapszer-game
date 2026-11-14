@@ -1,7 +1,7 @@
 import type { HCard, HSuit } from '../arcade/hungarian/cards';
 import { cardPoints, createDeck, mulberry32, rankStrength, sameCard, shuffle } from './deck';
 import {
-  DECLARE_THRESHOLD, KONTRA_FACTOR, SNAPSZER_UNITS, WRONG_DECLARE_UNITS, dealUnits,
+  DECLARE_THRESHOLD, KONTRA_FACTOR, MARRIAGE_POINTS, SNAPSZER_UNITS, WRONG_DECLARE_UNITS, dealUnits,
 } from './scoring';
 import type {
   Action3, Deal3Result, Deal3State, LogEntry3, Options, PlayedCard3, ResultReason3, Seat, Side, Trick3,
@@ -13,6 +13,9 @@ export const FOLD_UNITS = 2;
 export const FOLD_ACE_UNITS = 4;
 
 type Hands3 = Deal3State['hands'];
+
+/** Cards per seat in each of the two rounds of the three-player deal (the caller names the trump after the first). */
+export const DEAL3_ROUND = 4;
 
 const next = (seat: Seat): Seat => ((seat + 1) % 3) as Seat;
 /** The caller is the seat after the dealer. */
@@ -37,8 +40,9 @@ export function deal3(seed: number, opts: Options, dealer: Seat): Deal3State {
   const hands: HCard[][] = [[], [], []];
   const pending: HCard[][] = [[], [], []];
   order.forEach((seat, i) => {
-    hands[seat] = deck.slice(i * 4, i * 4 + 4);
-    pending[seat] = deck.slice(12 + i * 4, 16 + i * 4);
+    const r = DEAL3_ROUND;
+    hands[seat] = deck.slice(i * r, (i + 1) * r);
+    pending[seat] = deck.slice(3 * r + i * r, 3 * r + (i + 1) * r);
   });
   return {
     mode: 'three',
@@ -274,7 +278,7 @@ export function applyAction3(state: Deal3State, action: Action3): Deal3State {
       return fold(state);
     case 'marriage': {
       if (!marriageOptions3(state, seat).includes(action.suit)) throw new Error('Cannot announce this marriage');
-      const pts = action.suit === state.trump ? 40 : 20;
+      const pts = action.suit === state.trump ? MARRIAGE_POINTS.trump : MARRIAGE_POINTS.plain;
       return {
         ...state,
         marriages: [...state.marriages, { seat, suit: action.suit, points: pts }],

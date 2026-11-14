@@ -1,6 +1,10 @@
 import { createDeck, mulberry32, shuffle } from './deck';
 import type { Deal2State, Options, Seat, Seat2 } from './types';
 
+/** Cards per seat in the first round of the deal (before the trump is turned up) and in the second round. */
+export const DEAL_FIRST = 3;
+export const DEAL_SECOND = 2;
+
 export const other = (seat: Seat2): Seat2 => (seat === 0 ? 1 : 0);
 
 /** Narrows a seat to the two-player seats; seat 2 does not exist in a two-player deal. */
@@ -27,10 +31,14 @@ export function deal2(seed: number, opts: Options, dealer: Seat = 1): Deal2State
   const d = seat2(dealer);
   const first = other(d);
   const deck = shuffle(createDeck(opts), mulberry32(seed));
-  const firstHand = [...deck.slice(0, 3), ...deck.slice(7, 9)];
-  const dealerHand = [...deck.slice(3, 6), ...deck.slice(9, 11)];
-  const trumpCard = deck[6];
-  assertDrawableTalon(deck.length - 11);
+  const F = DEAL_FIRST;
+  const S = DEAL_SECOND;
+  const up = 2 * F; // the turned-up trump
+  const firstHand = [...deck.slice(0, F), ...deck.slice(up + 1, up + 1 + S)];
+  const dealerHand = [...deck.slice(F, 2 * F), ...deck.slice(up + 1 + S, up + 1 + 2 * S)];
+  const trumpCard = deck[up];
+  const rest = up + 1 + 2 * S;
+  assertDrawableTalon(deck.length - rest);
   const hands = (first === 0 ? [firstHand, dealerHand] : [dealerHand, firstHand]) as [typeof firstHand, typeof firstHand];
   return {
     mode: 'two',
@@ -39,7 +47,7 @@ export function deal2(seed: number, opts: Options, dealer: Seat = 1): Deal2State
     dealer: d,
     trump: trumpCard.suit,
     trumpCard,
-    talon: deck.slice(11),
+    talon: deck.slice(rest),
     hands,
     turn: first,
     leader: first,

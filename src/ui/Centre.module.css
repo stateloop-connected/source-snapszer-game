@@ -1,0 +1,191 @@
+.centre {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 6px 10px;
+  align-items: center;
+  padding: 6px 8px;
+  border: 1px dashed var(--panel-border-strong);
+  border-radius: var(--radius-md, 10px);
+  min-height: 0;
+  min-width: 0;
+}
+
+.stock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.caption {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.talon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* The turned-up trump lies crosswise under the face-down talon, half of it showing, as at the table. */
+.pile {
+  position: relative;
+  width: calc(var(--mid-w, 60px) * 1.9);
+  height: calc(var(--mid-w, 60px) * 1.6 + 6px);
+}
+
+.trumpUnder {
+  display: block;
+  position: absolute;
+  left: calc(var(--mid-w, 60px) * 0.75);
+  top: calc(var(--mid-w, 60px) * 0.3);
+  width: var(--mid-w, 60px);
+  transform: rotate(90deg);
+  transform-origin: 50% 50%;
+}
+
+.trumpCard {
+  width: 100%;
+}
+
+.stack {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--mid-w, 60px);
+}
+
+.stackCard {
+  position: absolute;
+  width: var(--mid-w, 60px);
+}
+
+.stackCard:nth-child(2) {
+  left: 2px;
+  top: 2px;
+}
+
+.stackCard:nth-child(3) {
+  left: 4px;
+  top: 4px;
+}
+
+/* Closed: the talon is turned across the trump (a shape cue) and the caption says who closed it. */
+.closed .stack {
+  left: calc(var(--mid-w, 60px) * 0.45);
+  transform: rotate(90deg);
+}
+
+.closed .trumpUnder {
+  left: calc(var(--mid-w, 60px) * 0.45);
+  transform: none;
+  top: 0;
+}
+
+.named {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.namedCard {
+  width: calc(var(--mid-w, 60px) * 0.8);
+}
+
+.trump {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+.tag {
+  font-size: 12px;
+  padding: 1px 6px;
+  border: 2px solid var(--text-strong);
+  border-radius: 4px;
+  color: var(--text-strong);
+}
+
+.trick {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.trickCards {
+  display: grid;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.two .trickCards {
+  grid-template-columns: auto auto;
+  grid-template-areas: 'north south';
+  gap: 0 8px;
+}
+
+.three .trickCards {
+  grid-template-columns: auto auto auto;
+  grid-template-areas: 'west . east' '. south .';
+  gap: 0 6px;
+}
+
+.played {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.trickCard {
+  width: var(--mid-w, 60px);
+}
+
+.north {
+  grid-area: north;
+}
+
+.south {
+  grid-area: south;
+}
+
+.two .south {
+  margin-top: calc(var(--mid-w, 60px) * 0.35);
+}
+
+.west {
+  grid-area: west;
+}
+
+.east {
+  grid-area: east;
+}
+
+.three .south {
+  margin-top: calc(var(--mid-w, 60px) * -0.7);
+}
