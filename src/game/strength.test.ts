@@ -19,6 +19,12 @@ describe('strength', () => {
     expect(t.wins / t.matches).toBeGreaterThanOrEqual(0.6);
   }, 600_000);
 
+  it('hard beats medium in ≥ 55 % of 60 duplicate-seeded two-player matches', () => {
+    const t = strengthTally('hard', 'medium', 60);
+    expect(t.matches).toBe(60);
+    expect(t.wins / t.matches).toBeGreaterThanOrEqual(0.55);
+  }, 600_000);
+
   it('three players: hard does at least as well as easy (match wins and units)', () => {
     const t = strengthTally3('hard', 'easy', 24);
     expect(t.matches).toBe(24);

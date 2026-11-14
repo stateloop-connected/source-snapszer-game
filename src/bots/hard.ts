@@ -22,6 +22,15 @@ const MIN_SAMPLES = 6;
 const MAX_SAMPLES = 120;
 /** Risk margins (units) a bold announcement must win by over the best plain card. */
 const MARGIN: Partial<Record<Action['type'], number>> = { kontra: 0.35, snapszer: 0.35, close: 0.15 };
+/** A bold candidate (kontra, snapszer, close) is never judged on fewer samples than this. */
+export const BOLD_MIN_SAMPLES = 24;
+
+/** Samples per decision: the rollout budget spread over the candidates, with a higher floor for bold ones. */
+export function sampleCount(candidates: readonly { type: string }[], cardsLeft: number): number {
+  const n = Math.max(MIN_SAMPLES, Math.min(MAX_SAMPLES, Math.floor(HARD_ROLLOUTS / (candidates.length * Math.max(1, cardsLeft / 4)))));
+  const bold = candidates.some((a) => MARGIN[a.type as Action['type']] !== undefined);
+  return bold ? Math.max(n, BOLD_MIN_SAMPLES) : n;
+}
 
 interface SeatCons {
   readonly voids: Set<HSuit>;
@@ -118,7 +127,7 @@ function evaluate<S, A extends { type: string }>(
   score: (s: S, a: A) => number,
   cardsLeft: number,
 ): A {
-  const n = Math.max(MIN_SAMPLES, Math.min(MAX_SAMPLES, Math.floor(HARD_ROLLOUTS / (candidates.length * Math.max(1, cardsLeft / 4)))));
+  const n = sampleCount(candidates, cardsLeft);
   const totals = candidates.map(() => 0);
   const start = performance.now();
   let done = 0;

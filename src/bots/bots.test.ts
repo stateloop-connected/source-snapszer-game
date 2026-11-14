@@ -5,6 +5,7 @@ import {
   type Action, type Action3, type Deal2State, type Deal3State, type Seat,
 } from '../engine';
 import { HARD_DEADLINE_MS, LEVELS, chooseAction, isLevel, type Level } from '.';
+import { BOLD_MIN_SAMPLES, sampleCount } from './hard';
 
 const key = (a: Action | Action3) => JSON.stringify(a);
 
@@ -110,6 +111,17 @@ describe('declare, exchange, marriage', () => {
   });
 });
 
+describe('no 20 / 40 after the own snapszer announcement', () => {
+  it.each(LEVELS)('%s (two players) leads instead of announcing a marriage during its snapszer', (level) => {
+    const s = build({ hand0: 'tK tF pA pX zA', hand1: 'pK pF zK zF mU', trumpCode: 'pU', talonCodes: 'tU mK mF tA tX zX mA mX', snapszer: { by: 0, defenderPlayed: 0 } });
+    expect(chooseAction(s, 0, level, mulberry32(5)).type).not.toBe('marriage');
+  });
+  it.each(LEVELS)('%s (three players) leads instead of announcing a marriage during its snapszer', (level) => {
+    const s = build3({ hand0: 'tK tF pA pX zA mA mX pK', hand1: 'zK zF zX z9 tA tX t9 tU', hand2: 'm9 mU mK mF p9 pU pF zU', snapszer: true });
+    expect(chooseAction(s, 0, level, mulberry32(5)).type).not.toBe('marriage');
+  });
+});
+
 describe('three players: trump and fold', () => {
   it.each(LEVELS)('%s names the trump with one of its first four cards', (level) => {
     for (let seed = 1; seed <= 20; seed++) {
@@ -142,6 +154,14 @@ describe('hard: sampling of the unseen cards', () => {
       const hands = (me === 0 ? [s.hands[0], pool.slice(0, s.hands[opp].length)] : [pool.slice(0, s.hands[opp].length), s.hands[1]]) as Deal2State['hands'];
       const t: Deal2State = { ...s, hands, talon: pool.slice(s.hands[opp].length) };
       expect(chooseAction(t, me, 'hard', mulberry32(99))).toEqual(chooseAction(s, me, 'hard', mulberry32(99)));
+    }
+  });
+
+  it(`bold candidates (kontra, snapszer, close) get at least ${BOLD_MIN_SAMPLES} samples`, () => {
+    const plain = [{ type: 'play' }, { type: 'play' }, { type: 'play' }, { type: 'play' }, { type: 'play' }];
+    expect(sampleCount(plain, 20)).toBeLessThan(BOLD_MIN_SAMPLES);
+    for (const bold of ['kontra', 'snapszer', 'close'] as const) {
+      expect(sampleCount([...plain, { type: bold }], 20)).toBeGreaterThanOrEqual(BOLD_MIN_SAMPLES);
     }
   });
 

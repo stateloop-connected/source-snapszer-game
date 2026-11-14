@@ -74,13 +74,14 @@ const bestMarriage = (suits: readonly HSuit[], trump: HSuit | null): HSuit =>
 
 /**
  * What every level does without thinking: „Elég!” as soon as it really wins, the exchange when it is useful, and a
- * 20 / 40 when it can announce one (it only ever adds points).
+ * 20 / 40 when it can announce one (it only ever adds points). No 20 / 40 while a snapszer runs: the announcer needs
+ * every trick (a marriage would force it to lead the K or F), the defenders need just one.
  */
 export function freeAction2(state: Deal2State, seat: Seat): Action | null {
   if (canDeclareWin(state, seat)) return { type: 'declare' };
   if (exchangeUseful(state, seat)) return { type: 'exchange' };
   const suits = marriageOptions(state, seat);
-  if (suits.length > 0 && !(state.snapszer && state.snapszer.by !== seat)) return { type: 'marriage', suit: bestMarriage(suits, state.trump) };
+  if (suits.length > 0 && !state.snapszer) return { type: 'marriage', suit: bestMarriage(suits, state.trump) };
   return null;
 }
 
@@ -88,7 +89,7 @@ export function freeAction3(state: Deal3State, seat: Seat): Action3 | null {
   if (state.phase !== 'play') return null;
   if (canDeclareWin3(state, seat)) return { type: 'declare' };
   const suits = marriageOptions3(state, seat);
-  if (suits.length > 0) return { type: 'marriage', suit: bestMarriage(suits, state.trump) };
+  if (suits.length > 0 && !state.snapszer) return { type: 'marriage', suit: bestMarriage(suits, state.trump) };
   return null;
 }
 
