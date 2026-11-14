@@ -1,5 +1,149 @@
+/*
+ * The portal preview box (16:10, ~316 × 198 px and up). Everything is sized from the box itself (container
+ * units), so the miniature fills it at any card width. Columns: seats and talon | cards. Rows: opponent, centre, you.
+ */
 .demo {
+  position: absolute;
+  inset: 0;
+  container-type: size;
   pointer-events: none;
   user-select: none;
-  font-size: 13px;
+}
+/* Container units resolve against an ancestor, so the grid sits inside the sized box. */
+.table {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 31cqw 1fr;
+  grid-template-rows: 27cqh 1fr 37cqh;
+  align-items: center;
+  column-gap: 3cqw;
+  padding: 3cqh 4cqw;
+  box-sizing: border-box;
+  font-size: clamp(9px, 5.6cqh, 16px);
+  line-height: 1.2;
+  color: var(--text-strong);
+  /* felt */
+  background:
+    radial-gradient(ellipse at 60% 50%, color-mix(in srgb, var(--game-snapszer) 22%, transparent), transparent 70%);
+}
+
+/* ── seats ── */
+.seat {
+  display: flex;
+  align-items: center;
+  gap: 2.5cqw;
+  min-width: 0;
+  padding: 1cqh 1.5cqw;
+  border: 1px solid transparent;
+  border-radius: 10px;
+}
+/* On turn: a thick outline plus the ▶ before the name (never colour alone). */
+.turn {
+  border: 2px solid var(--text-strong);
+  background: var(--panel-bg);
+}
+.portrait {
+  flex: none;
+  height: 20cqh;
+  aspect-ratio: 80 / 96;
+}
+.portrait svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  white-space: nowrap;
+  color: var(--text-dim);
+}
+.name {
+  color: var(--text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── card rows ── */
+/* Cards are sized by width (height follows the 100 × 160 card): the kit's `.arc-card { height: auto }` may load later. */
+.backs,
+.hand,
+.trick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+}
+.backs > span {
+  display: block;
+  margin-inline: -1.6cqh;
+}
+.back {
+  display: block;
+  width: calc(23cqh * 0.625);
+}
+.hand > span {
+  display: block;
+  margin-inline: -0.8cqh;
+}
+.handCard {
+  width: calc(33cqh * 0.625);
+}
+
+/* ── centre: trump crosswise under the talon, then the trick ── */
+.stock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1cqh;
+  min-width: 0;
+}
+.talon {
+  position: relative;
+  height: 22cqh;
+  width: 34cqh;
+}
+.trumpUnder {
+  position: absolute;
+  left: 13cqh;
+  top: 50%;
+  height: 22cqh;
+  transform: translateY(-50%) rotate(90deg);
+}
+.trumpCard,
+.talonCard {
+  display: block;
+  width: calc(22cqh * 0.625);
+}
+.talonCard {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.caption {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  white-space: nowrap;
+  font-size: 0.9em;
+  color: var(--text-dim);
+}
+
+.trick {
+  position: relative;
+}
+.trick > span {
+  display: block;
+}
+.theirs {
+  transform: translate(12%, -6%) rotate(-8deg);
+}
+.mine {
+  transform: translate(-12%, 6%) rotate(7deg);
+}
+.trickCard {
+  width: calc(25cqh * 0.625);
 }
