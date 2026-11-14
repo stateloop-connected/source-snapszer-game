@@ -26,7 +26,8 @@ const seatsOf = (state: Deal3State, side: Side): Seat[] =>
 
 /**
  * Shuffles with the seed and deals 4 + 4 to each, starting with the caller (the seat after the dealer). Only the
- * first four are in hand until the caller names the trump; the caller leads.
+ * first four are in hand until the caller names the trump; the caller leads. The nines are always in, so the
+ * state's `opts` is normalised to `withNines: true`.
  */
 export function deal3(seed: number, opts: Options, dealer: Seat): Deal3State {
   if (opts.mode !== 'three') throw new Error('deal3 is the three-player deal');
@@ -41,7 +42,7 @@ export function deal3(seed: number, opts: Options, dealer: Seat): Deal3State {
   });
   return {
     mode: 'three',
-    opts,
+    opts: { mode: 'three', withNines: true },
     seed,
     dealer,
     caller,

@@ -31,6 +31,7 @@ describe('deal3', () => {
     expect(s.pending.map((h) => h.length)).toEqual([4, 4, 4]);
     const all = [...s.hands.flat(), ...s.pending.flat()].map(cardKey);
     expect(new Set(all).size).toBe(24);
+    expect(s.opts).toEqual({ mode: 'three', withNines: true });
   });
   it('deals 4 to each from the caller, then 4 more to each', () => {
     const deck = shuffle(createDeck(opts3), mulberry32(7));
@@ -104,6 +105,18 @@ describe('fold (bedobás)', () => {
     expect(canFold3(dealt, 1)).toBe(false);
     expect(() => fold(dealt)).toThrow();
     expect(legalActions3(chooseTrump(dealt, dealt.hands[1][0]))).toContainEqual({ type: 'fold' });
+  });
+  it('is blocked after a 20 / 40 or a snapszer at the first lead', () => {
+    const s = build3({ hand0: 'pK pF tX zX mX tK zK mK' });
+    expect(canFold3(s, 0)).toBe(true);
+    const married = applyAction3(s, { type: 'marriage', suit: 'piros' });
+    expect(canFold3(married, 0)).toBe(false);
+    expect(legalActions3(married)).not.toContainEqual({ type: 'fold' });
+    expect(() => fold(married)).toThrow();
+    const called = applyAction3(s, { type: 'snapszer' });
+    expect(canFold3(called, 0)).toBe(false);
+    expect(legalActions3(called)).not.toContainEqual({ type: 'fold' });
+    expect(() => applyAction3(called, { type: 'fold' })).toThrow();
   });
 });
 
@@ -274,6 +287,7 @@ describe('random legal play (seeded)', () => {
         expect(JSON.stringify(s)).toBe(before);
         s = next;
         const held = [...s.hands.flat(), ...s.pending.flat(), ...s.trick.map((p) => p.card), ...s.tricks.flatMap((t) => t.cards.map((p) => p.card))];
+        expect(held.length).toBe(24);
         expect(new Set(held.map(cardKey)).size).toBe(24);
       }
       const r = dealResult3(s);
