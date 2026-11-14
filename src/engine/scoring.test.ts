@@ -22,7 +22,7 @@ describe('constants', () => {
     expect(DECLARE_THRESHOLD).toBe(66);
     expect(SNAPSZER_UNITS).toBe(6);
     expect(WRONG_DECLARE_UNITS).toBe(2);
-    expect(CLOSE_FAILED_UNITS).toBeGreaterThanOrEqual(1);
+    expect(CLOSE_FAILED_UNITS).toBe(1); // controller ruling: the wiki gives the opponent 1
   });
 });
 

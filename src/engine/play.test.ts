@@ -4,7 +4,7 @@ import { c, cs, build, trick } from './__tests__/helpers';
 import { cardKey, mulberry32 } from './deck';
 import { deal2 } from './deal';
 import {
-  applyAction, canClose, canDeclare, canExchange, canKontra, canSnapszer, isTalonOpen, legalActions, legalPlays,
+  applyAction, canClose, canDeclare, canDeclareWin, canExchange, canKontra, canSnapszer, isTalonOpen, legalActions, legalPlays,
   marriageOptions, trickWinner,
 } from './play';
 import { points } from './scoring';
@@ -186,6 +186,25 @@ describe('turn-bound announcements', () => {
     expect(canKontra(s, 1)).toBe(false);
     expect(canSnapszer(s, 0)).toBe(true);
     expect(canKontra(s, 0)).toBe(true);
+  });
+});
+
+describe('canDeclareWin (no losing „Elég!” by accident)', () => {
+  const win = [trick(0, 'pA', 'tX'), trick(0, 'tA', 'zX'), trick(0, 'zA', 'mX'), trick(0, 'mA', 'tK')];
+  it('true only for the seat on turn with ≥ 66 counted points', () => {
+    expect(canDeclareWin(build({ tricks: win }), 0)).toBe(true);
+    expect(canDeclareWin(build({ tricks: win.slice(0, 3) }), 0)).toBe(false);
+    expect(canDeclareWin(build({ tricks: win, turn: 1 }), 0)).toBe(false);
+  });
+  it('a marriage without a won trick does not count', () => {
+    const s = build({ tricks: [trick(1, 'pA', 'tX')], marriages: [{ seat: 0, suit: 'piros', points: 40 }, { seat: 0, suit: 'tok', points: 20 }, { seat: 0, suit: 'zold', points: 20 }] });
+    expect(canDeclareWin(s, 0)).toBe(false);
+  });
+  it('the losing declare stays legal', () => {
+    const s = build({});
+    expect(canDeclareWin(s, 0)).toBe(false);
+    expect(canDeclare(s, 0)).toBe(true);
+    expect(legalActions(s)).toContainEqual({ type: 'declare' });
   });
 });
 

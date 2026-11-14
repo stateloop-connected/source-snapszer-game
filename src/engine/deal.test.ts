@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { cardKey, createDeck, mulberry32, shuffle } from './deck';
-import { deal2 } from './deal';
+import { assertDrawableTalon, deal2 } from './deal';
 
 const opts = { mode: 'two', withNines: false } as const;
 
@@ -40,5 +40,13 @@ describe('deal2', () => {
   });
   it('rejects the three-player mode', () => {
     expect(() => deal2(1, { mode: 'three', withNines: true })).toThrow();
+  });
+  it('the talon above the trump is odd, so the last pair takes the last talon card and the trump', () => {
+    expect(deal2(3, opts).talon.length % 2).toBe(1);
+    expect(deal2(3, { mode: 'two', withNines: true }).talon.length % 2).toBe(1);
+    expect(() => assertDrawableTalon(9)).not.toThrow();
+    expect(() => assertDrawableTalon(13)).not.toThrow();
+    expect(() => assertDrawableTalon(8)).toThrow(/odd/);
+    expect(() => assertDrawableTalon(0)).toThrow(/odd/);
   });
 });

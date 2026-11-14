@@ -1,7 +1,7 @@
 import type { HCard, HSuit } from '../arcade/hungarian/cards';
 import { rankStrength, sameCard } from './deck';
 import { other } from './deal';
-import { points, resolveAfterTrick, resolveDeclare } from './scoring';
+import { DECLARE_THRESHOLD, points, resolveAfterTrick, resolveDeclare } from './scoring';
 import type { Action, Deal2State, LogEntry, PlayedCard, Seat, Seat2, Trick } from './types';
 
 /** Minimum face-down cards above the trump for exchanging or closing. */
@@ -69,6 +69,9 @@ export function marriageOptions(state: Deal2State, seat: Seat): HSuit[] {
 
 /** „Elég!” is always allowed on your turn; under 66 it loses the deal (see WRONG_DECLARE_UNITS). */
 export const canDeclare = (state: Deal2State, seat: Seat): boolean => onTurn(state, seat);
+
+/** „Elég!” that really wins: the seat on turn has ≥ 66 counted points. Bots and the UI offer only this one. */
+export const canDeclareWin = (state: Deal2State, seat: Seat): boolean => onTurn(state, seat) && points(state, seat) >= DECLARE_THRESHOLD;
 
 /** Snapszer: in the first round only, by the seat on turn before it has played a card, once per deal. */
 export const canSnapszer = (state: Deal2State, seat: Seat): boolean =>

@@ -108,3 +108,91 @@ export interface Deal2State {
   readonly result: DealResult | null;
   readonly log: readonly LogEntry[];
 }
+
+/* ---------- Three-player mode: the caller alone against the pair of defenders ---------- */
+
+export type Side = 'caller' | 'defenders';
+export type Phase3 = 'trump' | 'play';
+
+/** Three-player actions: no talon, so no exchange and no close; plus naming the trump and folding. */
+export type Action3 =
+  | Exclude<Action, { type: 'exchange' } | { type: 'close' }>
+  /** The caller names the trump suit with one of its first four cards. */
+  | { readonly type: 'trump'; readonly card: HCard }
+  /** Bedobás: the caller throws in its hand before the first lead. */
+  | { readonly type: 'fold' };
+
+export type ResultReason3 = 'declared' | 'lastTrick' | 'snapszer' | 'snapszerFailed' | 'fold';
+
+export interface Deal3Result {
+  readonly winner: Side;
+  /** Units won by each seat (kontra applied): the caller alone, or each defender the same amount. */
+  readonly units: Readonly<Record<Seat, number>>;
+  readonly reason: ResultReason3;
+}
+
+export interface PlayedCard3 {
+  readonly seat: Seat;
+  readonly card: HCard;
+}
+
+export interface Trick3 {
+  readonly leader: Seat;
+  readonly cards: readonly [PlayedCard3, PlayedCard3, PlayedCard3];
+  readonly winner: Seat;
+}
+
+export interface Marriage3 {
+  readonly seat: Seat;
+  readonly suit: HSuit;
+  readonly points: 20 | 40;
+}
+
+export interface Kontra3 {
+  /** 0 none, 1 kontra (a defender), 2 rekontra (the caller), 3 subkontra (a defender); the deal counts × 2^level. */
+  readonly level: 0 | 1 | 2 | 3;
+  readonly by: Seat | null;
+  /** Cards each seat had played at the last raise: the next raiser must not have played since. */
+  readonly played: readonly [number, number, number];
+}
+
+export type LogEntry3 =
+  | { readonly type: 'deal'; readonly dealer: Seat; readonly caller: Seat }
+  | { readonly type: 'trump'; readonly seat: Seat; readonly card: HCard }
+  | { readonly type: 'fold'; readonly seat: Seat }
+  | { readonly type: 'play'; readonly seat: Seat; readonly card: HCard }
+  | { readonly type: 'trick'; readonly index: number; readonly winner: Seat }
+  | { readonly type: 'marriage'; readonly seat: Seat; readonly suit: HSuit; readonly points: 20 | 40 }
+  | { readonly type: 'declare'; readonly seat: Seat; readonly points: number }
+  | { readonly type: 'snapszer'; readonly seat: Seat }
+  | { readonly type: 'kontra'; readonly seat: Seat; readonly level: 1 | 2 | 3 }
+  | { readonly type: 'over'; readonly result: Deal3Result };
+
+export interface Deal3State {
+  readonly mode: 'three';
+  readonly opts: Options;
+  readonly seed: number;
+  readonly dealer: Seat;
+  /** The seat after the dealer: names the trump and plays alone. */
+  readonly caller: Seat;
+  readonly phase: Phase3;
+  /** Null until the caller names it. */
+  readonly trump: HSuit | null;
+  /** The card the caller named the trump with (it stays in the caller's hand). */
+  readonly trumpCard: HCard | null;
+  readonly hands: readonly [readonly HCard[], readonly HCard[], readonly HCard[]];
+  /** The second four cards of each seat, handed out once the trump is named. */
+  readonly pending: readonly [readonly HCard[], readonly HCard[], readonly HCard[]];
+  readonly turn: Seat;
+  readonly leader: Seat;
+  /** Cards of the current, unfinished trick (0–2). */
+  readonly trick: readonly PlayedCard3[];
+  readonly tricks: readonly Trick3[];
+  readonly marriages: readonly Marriage3[];
+  readonly mustLead: HSuit | null;
+  /** The caller announced snapszer. */
+  readonly snapszer: boolean;
+  readonly kontra: Kontra3;
+  readonly result: Deal3Result | null;
+  readonly log: readonly LogEntry3[];
+}
